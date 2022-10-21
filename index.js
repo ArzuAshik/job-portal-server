@@ -17,7 +17,7 @@ app.use(express.static("public"));
 app.set("view engine", "ejs");
 
 // db connection
-mongoose.connect(process.env.DATABASE, {
+mongoose.connect(process.env.DATABASE_LOCAL, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
@@ -50,7 +50,4 @@ app.use(errorHandler);
 
 process.on("unhandledRejection", (error) => {
   console.log(error.name, error.message);
-  app.close(() => {
-    process.exit(1);
-  });
 });

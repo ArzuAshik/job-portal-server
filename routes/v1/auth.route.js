@@ -1,12 +1,12 @@
-const jobsControllers = require("../../controllers/jobs.controller");
+const authControllers = require("../../controllers/auth.controller");
 const express = require("express");
 const router = express.Router();
 
 router.route("/signup")
-    .get(jobsControllers.getHighestPaidJobs);
+    .post(authControllers.signup);
 router.route("/login")
-    .get(jobsControllers.getHighestPaidJobs);
+    .post(authControllers.login);
 router.route("/me")
-    .get(jobsControllers.getHighestPaidJobs);
+    .get(authControllers.getUserInfo);
 
 module.exports = router;

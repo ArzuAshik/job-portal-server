@@ -10,12 +10,13 @@ router.route("/most-applied")
 
 router.route("/")
     .get(jobsControllers.getAllJobs)
-// .post(jobsControllers.addJob);
+    .post(jobsControllers.addJob);
+
+router.route("/:id/apply")
+    .post(jobsControllers.applyForJob);
 
 router.route("/:id")
     .get(jobsControllers.getJobDetails)
 // .patch(jobsControllers.updateJob)
 
-router.route("/:id/apply")
-    .post(jobsControllers.applyForJob);
 module.exports = router;

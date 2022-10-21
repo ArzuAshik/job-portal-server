@@ -1,67 +1,60 @@
 // const { getDb } = require("../utils/dbConnect");
-const { Tour } = require("../models/Tour");
+const { Job } = require("../models/Job");
 
 exports.getAllJobs = async (req, res, next) => {
-    res.send("getting manager's jobs.")
-    // let { sortBy = "", fields = "", page = "1", limit = "10", ...filters } = req.query;
-    // sortBy = sortBy.replaceAll(",", " ");
-    // page = Number(page);
-    // limit = Number(limit);
+    let { sortBy = "", fields = "", page = "1", limit = "10", ...filters } = req.query;
+    sortBy = sortBy.replaceAll(",", " ");
+    page = Number(page);
+    limit = Number(limit);
 
-    // if (filters) {
-    //     filters = JSON.parse(JSON.stringify(filters).replace(/\b(gt|gte|lt|lte)\b/g, (matched) => `$${matched}`));
-    // }
+    if (filters) {
+        filters = JSON.parse(JSON.stringify(filters).replace(/\b(gt|gte|lt|lte)\b/g, (matched) => `$${matched}`));
+    }
 
-    // try {
-    //     const data = await Tour.find(filters)
-    //         .select(fields.replaceAll(",", " "))
-    //         .sort(sortBy).skip((Number(page) - 1) * Number(limit)).limit(Number(limit));
+    try {
+        const data = await Job.find(filters)
+            .select(fields.replaceAll(",", " "))
+            .sort(sortBy).skip((Number(page) - 1) * Number(limit)).limit(Number(limit));
 
-    //     res.status(200).json({
-    //         // totalPage: 0,
-    //         currentPage: page,
-    //         data
-    //     });
-    // } catch (error) {
-    //     res.send(error);
-    // }
-}
-exports.addJob = async (req, res, next) => {
-    res.send("add a new job by manager.");
-    // try {
-    //     const tour = new Tour({ ...req.body, viewCount: 0 });
-    //     const result = await tour.save();
-    //     res.json(result);
-
-    // } catch (error) {
-    //     res.json({ error, msg: "error" });
-    // }
+        res.status(200).json({
+            // totalPage: 0,
+            currentPage: page,
+            data
+        });
+    } catch (error) {
+        res.send(error);
+    }
 }
 
 exports.getJobDetails = async (req, res, next) => {
     const { id } = req.params;
-    res.send(`Getting Job details with applications of Job id: ${id}`);
-    // try {
-    //     const data = await Tour.findById(id);
-    //     res.status(200).json({
-    //         data
-    //     });
-    // } catch (error) {
-    //     res.send(error);
-    // }
+    // should send application details
+    try {
+        const jobInfo = await Job.findById(id);
+        res.status(200).json({
+            data: { jobInfo },
+            applicationInfo: []
+        });
+    } catch (error) {
+        res.send(error);
+    }
 }
 
 exports.updateJob = async (req, res, next) => {
     const { id } = req.params;
-    res.send(`Updating Job id: ${id}`);
-    const { viewCount, ...rest } = req.body;
+    const { applied, ...rest } = req.body;
     try {
-        await Tour.updateOne({ _id: id }, { $set: rest }, { runValidators: true })
-        const data = await Tour.findById(id);
+        const result = await Job.updateOne({ _id: id }, { $set: rest }, { runValidators: true });
 
-        res.status(200).json({
-            data
-        });
+        if (result.modifiedCount > 0) {
+            res.status(200).json({
+                success: true, message: "Job info updated successfully."
+            });
+        } else {
+            res.status(200).json({
+                success: false, message: "Job info update failed."
+            });
+        }
     } catch (error) {
         res.send(error);
     }
