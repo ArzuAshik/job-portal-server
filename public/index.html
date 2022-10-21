@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Job Portal - Backend</title>
+  </head>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-image: linear-gradient(to bottom right, #dbeafe, #f5d0fe);
+      min-height: 100vh;
+    }
+    h1 {
+      text-align: center;
+    }
+    .container {
+      max-width: 800px;
+      margin: auto;
+      display: flex;
+      justify-content: center;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+    table * {
+      border-color: black;
+      padding: 5px 10px;
+      text-align: center;
+    }
+
+    .get {
+      background-color: #f0fdf4;
+      color: #16a34a;
+      text-transform: uppercase;
+    }
+    .patch {
+      color: #eab308;
+      background-color: #fef9c3;
+      text-transform: uppercase;
+    }
+    .post {
+      color: #0ea5e9;
+      background-color: #e0f2fe;
+      text-transform: uppercase;
+    }
+    .title {
+      background-color: #e2e8f0;
+      color: #334155;
+    }
+  </style>
+  <body>
+    <h1>Job Portal - Backend</h1>
+    <div class="container">
+      <table border="1">
+        <thead>
+          <tr>
+            <th>Method</th>
+            <th>Parent</th>
+            <th>Name</th>
+            <th>URL</th>
+            <th>Work Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td colspan="5" class="title">Candidate</td>
+          </tr>
+          <tr>
+            <td class="get">GET</td>
+            <td rowspan="5">Jobs</td>
+            <td>getAllJobs</td>
+            <td><a href="/api/v1/jobs">/</a></td>
+            <td>initial</td>
+          </tr>
+          <tr>
+            <td class="get">GET</td>
+            <td>getJobDetails</td>
+            <td><a href="/api/v1/jobs/123">/:id</a></td>
+            <td>initial</td>
+          </tr>
+          <tr>
+            <td class="post">POST</td>
+            <td>applyForJob</td>
+            <td><a href="/api/v1/jobs/123/apply">/:id/apply</a></td>
+            <td>initial</td>
+          </tr>
+          <tr>
+            <td class="get">GET</td>
+            <td>getHighestPaidJobs</td>
+            <td><a href="/api/v1/jobs/highest-paid">/highest-paid</a></td>
+            <td>initial</td>
+          </tr>
+          <tr>
+            <td class="get">GET</td>
+            <td>getMostAppliedJobs</td>
+            <td><a href="/api/v1/jobs/most-applied">/most-applied</a></td>
+            <td>initial</td>
+          </tr>
+
+          <!-- manager routes -->
+          <tr>
+            <td colspan="5" class="title">Manager</td>
+          </tr>
+          <tr>
+            <td class="get">GET</td>
+            <td rowspan="4">Manager</td>
+            <td>getAllJobs</td>
+            <td><a href="/api/v1/manager/jobs">/</a></td>
+            <td>initial</td>
+          </tr>
+          <tr>
+            <td class="post">POST</td>
+            <td>addAJob</td>
+            <td><a href="/api/v1/manager/jobs">/</a></td>
+            <td>initial</td>
+          </tr>
+          <tr>
+            <td class="get">GET</td>
+            <td>details of job</td>
+            <td><a href="/api/v1/manager/jobs/123">/:id</a></td>
+            <td>initial</td>
+          </tr>
+          <tr>
+            <td class="patch">PATCH</td>
+            <td>Update job</td>
+            <td><a href="/api/v1/manager/jobs/123">/:id</a></td>
+            <td>initial</td>
+          </tr>
+
+          <!-- admin routes -->
+          <tr>
+            <td colspan="5" class="title">Admin</td>
+          </tr>
+          <tr>
+            <td class="get">GET</td>
+            <td rowspan="4">Admin</td>
+            <td>getCandidates</td>
+            <td><a href="/api/v1/admin/candidates">/</a></td>
+            <td>initial</td>
+          </tr>
+          <tr>
+            <td class="get">GET</td>
+            <td>getCandidateDetails</td>
+            <td><a href="/api/v1/admin/candidates/123">/:id</a></td>
+            <td>initial</td>
+          </tr>
+          <tr>
+            <td class="get">GET</td>
+            <td>getManagers</td>
+            <td><a href="/api/v1/admin/managers">/managers</a></td>
+            <td>initial</td>
+          </tr>
+          <tr>
+            <td class="patch">PATCH</td>
+            <td>update a user to manager</td>
+            <td><a href="/api/v1/admin/user-role/:id">/user-role/:id</a></td>
+            <td>initial</td>
+          </tr>
+
+          <!-- auth routes -->
+          <tr>
+            <td colspan="5" class="title">Auth</td>
+          </tr>
+          <tr>
+            <td class="post">post</td>
+            <td rowspan="3">user</td>
+            <td>Sign Up</td>
+            <td><a href="/api/v1/user/signup">/signup</a></td>
+            <td>initial</td>
+          </tr>
+          <tr>
+            <td class="post">post</td>
+            <td>Login</td>
+            <td><a href="/api/v1/user/login">/login</a></td>
+            <td>initial</td>
+          </tr>
+          <tr>
+            <td class="get">get</td>
+            <td>User Details</td>
+            <td><a href="/api/v1/user/me">/me</a></td>
+            <td>initial</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>
