@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { ObjectId } = mongoose.Schema.Types;
 
 // schema design
 const jobSchema = mongoose.Schema({
@@ -60,7 +61,7 @@ const jobSchema = mongoose.Schema({
         }
     },
     deadline: {
-        // should be a object id
+        // should be a date
         type: String,
         required: [true, "Please Provide the deadline."]
     },
@@ -69,8 +70,9 @@ const jobSchema = mongoose.Schema({
         required: true,
         default: 0
     },
-    managerId: {
-        type: String,
+    manager: {
+        type: ObjectId,
+        ref: "User",
         required: true,
     }
 }, {

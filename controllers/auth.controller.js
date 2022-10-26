@@ -3,12 +3,10 @@ const { User } = require("../models/User");
 const bcrypt = require('bcryptjs');
 const { generateToken } = require("../utils/token");
 
-exports.signup = async (req, res, next) => {
+exports.signup = async (req, res) => {
     try {
-        // const user = new User(req.body);
         const user = await User.create(req.body);
-        const {password, ...data} = user.toObject();
-        // const data = await user.save();
+        const { password, ...data } = user.toObject();
 
         res.status(200).json({
             message: "Signup Successful.",
@@ -19,7 +17,7 @@ exports.signup = async (req, res, next) => {
     }
 }
 
-exports.login = async (req, res, next) => {
+exports.login = async (req, res) => {
     const { email, password } = req.body;
     if (!email || !password) return res.status(401).json({ message: "email and password is required." });
 
@@ -45,7 +43,7 @@ exports.login = async (req, res, next) => {
     }
 }
 
-exports.getUserInfo = async (req, res, next) => {
+exports.getUserInfo = async (req, res) => {
     const { email } = req.user;
     try {
         const data = await User.findOne({ email }).select("-password -createdAt -updatedAt -__v");

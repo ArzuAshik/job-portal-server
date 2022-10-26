@@ -2,6 +2,7 @@ const jobsControllers = require("../../controllers/jobs.controller");
 const express = require("express");
 const router = express.Router();
 const { verifyToken } = require("../../middleware/verifyToken");
+const auth = require("../../middleware/auth");
 
 router.use(verifyToken);
 
@@ -13,7 +14,7 @@ router.route("/most-applied")
 
 router.route("/")
     .get(jobsControllers.getAllJobs)
-    .post(jobsControllers.addJob);
+    .post(auth("manager"), jobsControllers.addJob);
 
 router.route("/:id/apply")
     .post(jobsControllers.applyForJob);

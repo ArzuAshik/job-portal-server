@@ -1,8 +1,9 @@
-// const { getDb } = require("../utils/dbConnect");
 const { Job } = require("../models/Job");
 const { Application } = require("../models/Application");
+const { User } = require("../models/User");
 
 exports.getAllJobs = async (req, res, next) => {
+
     let { sortBy = "", page = "1", limit = "10", ...filters } = req.query;
     sortBy = sortBy.replaceAll(",", " ");
     page = Number(page);
@@ -26,20 +27,25 @@ exports.getAllJobs = async (req, res, next) => {
         res.send(error);
     }
 }
+
 exports.addJob = async (req, res, next) => {
     try {
-        const job = new Job(req.body);
-        const result = await job.save();
+        const { email } = req.user;
+        const user = await User.findOne({ email });
+        const result = await Job.create({ ...req.body, manager: user._id.toString() });
         res.json(result);
     } catch (error) {
         res.json({ error, msg: "error" });
     }
 }
+
 exports.getJobDetails = async (req, res, next) => {
-    // need to send manager info
     const { id } = req.params;
     try {
-        const data = await Job.findById(id);
+        const info = await Job.findById(id).populate("manager");
+        const data = info.toObject();
+        delete data.manager.password;
+
         res.status(200).json({
             data
         });
@@ -78,7 +84,7 @@ exports.applyForJob = async (req, res, next) => {
 
         if (result.modifiedCount > 0) {
             res.status(200).json({ success: true, message: "successfully applied for the job.", apply, result });
-        } else{
+        } else {
             res.status(200).json({ success: false, message: "application failed.", result, apply });
         }
 
