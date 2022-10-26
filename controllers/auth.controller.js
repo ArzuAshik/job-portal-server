@@ -1,10 +1,14 @@
 // const { getDb } = require("../utils/dbConnect");
 const { User } = require("../models/User");
+const bcrypt = require('bcryptjs');
+const { generateToken } = require("../utils/token");
 
 exports.signup = async (req, res, next) => {
     try {
-        const user = new User(req.body);
-        const data = await user.save();
+        // const user = new User(req.body);
+        const user = await User.create(req.body);
+        const {password, ...data} = user.toObject();
+        // const data = await user.save();
 
         res.status(200).json({
             message: "Signup Successful.",
@@ -16,10 +20,24 @@ exports.signup = async (req, res, next) => {
 }
 
 exports.login = async (req, res, next) => {
+    const { email, password } = req.body;
+    if (!email || !password) return res.status(401).json({ message: "email and password is required." });
+
     try {
-        const data = await User.find(req.body).select("-password -createdAt -updatedAt");
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(401).json({ message: "No user found with this email." });
+        }
+        const isPasswordMatched = user.verifyPassword(password, user.password);
+
+        if (!isPasswordMatched) {
+            return res.status(401).json({ message: "incorrect email or password." });
+        }
+
+        const { password: pd, createdAt, updatedAt, ...data } = user.toObject();
         res.status(200).json({
             message: "Login Successful.",
+            token: generateToken(data),
             data
         });
     } catch (error) {
@@ -28,8 +46,9 @@ exports.login = async (req, res, next) => {
 }
 
 exports.getUserInfo = async (req, res, next) => {
+    const { email } = req.user;
     try {
-        const data = await User.findOne(req.query).select("-password -createdAt -updatedAt");
+        const data = await User.findOne({ email }).select("-password -createdAt -updatedAt -__v");
 
         res.status(200).json({
             data

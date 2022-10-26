@@ -1,6 +1,11 @@
 const adminControllers = require("../../controllers/admin.controller");
 const express = require("express");
 const router = express.Router();
+const { verifyToken } = require("../../middleware/verifyToken");
+const auth = require("../../middleware/auth");
+
+router.use(verifyToken);
+router.use(auth("admin"));
 
 router.route("/candidates")
     .get(adminControllers.getCandidates);
