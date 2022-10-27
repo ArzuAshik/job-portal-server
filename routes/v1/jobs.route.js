@@ -3,6 +3,8 @@ const express = require("express");
 const router = express.Router();
 const { verifyToken } = require("../../middleware/verifyToken");
 const auth = require("../../middleware/auth");
+const uploader = require('../../middleware/uploader');
+const { preventDuplicateApply } = require("../../middleware/preventDuplicateApply");
 
 router.use(verifyToken);
 
@@ -17,7 +19,7 @@ router.route("/")
     .post(auth("manager"), jobsControllers.addJob);
 
 router.route("/:id/apply")
-    .post(jobsControllers.applyForJob);
+    .post(preventDuplicateApply, uploader.single("resume"), jobsControllers.applyForJob);
 
 router.route("/:id")
     .get(jobsControllers.getJobDetails)

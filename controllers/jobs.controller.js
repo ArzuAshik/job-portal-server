@@ -42,7 +42,7 @@ exports.addJob = async (req, res, next) => {
 exports.getJobDetails = async (req, res, next) => {
     const { id } = req.params;
     try {
-        const info = await Job.findById(id).populate("manager");
+        const info = await Job.findById(id).populate("manager").select("-applicants");
         const data = info.toObject();
         delete data.manager.password;
 
@@ -75,12 +75,26 @@ exports.updateJob = async (req, res, next) => {
 
 exports.applyForJob = async (req, res, next) => {
     const { id } = req.params;
-    try {
-        const application = new Application(req.body);
-        const apply = await application.save();
-        const result = await Job.updateOne({ _id: id }, { $inc: { applied: 1 } });
 
-        // application collection should update
+    try {
+        const applicationData = {
+            jobId: id,
+            candidateId: req.user.id,
+            resume: undefined
+        };
+        if (req.file) {
+            applicationData.resume = req.file.filename;
+        }
+
+        const apply = await Application.create(applicationData);
+        const result = await Job.updateOne(
+            { _id: id },
+            {
+                $push: {
+                    applicants: { user: req.user.id, resume: req.file.filename }
+                }
+            }
+        );
 
         if (result.modifiedCount > 0) {
             res.status(200).json({ success: true, message: "successfully applied for the job.", apply, result });
@@ -89,6 +103,7 @@ exports.applyForJob = async (req, res, next) => {
         }
 
     } catch (error) {
+        console.log(error);
         res.status(200).json({ success: false, message: "application failed.", a: req.body });
     }
 }
@@ -107,7 +122,7 @@ exports.getHighestPaidJobs = async (req, res, next) => {
 
 exports.getMostAppliedJobs = async (req, res, next) => {
     try {
-        const data = await Job.find().sort("-applied").limit(5);
+        const data = await Job.find().sort("-applicants").limit(5);
 
         res.status(200).json({
             data

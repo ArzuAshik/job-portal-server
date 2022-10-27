@@ -1,4 +1,5 @@
 const { ObjectId } = require("mongodb");
+const { Application } = require("../models/Application");
 const { Job } = require("../models/Job");
 const { User } = require("../models/User");
 
@@ -35,10 +36,9 @@ exports.getJobDetails = async (req, res, next) => {
 
     // should send application details
     try {
-        const jobInfo = await Job.findById(id).populate("manager");
+        const jobInfo = await Job.findById(id).populate("manager").populate("applicants.user", "-password");
         res.status(200).json({
             data: { jobInfo },
-            applicationInfo: []
         });
     } catch (error) {
         res.send(error);
@@ -60,34 +60,6 @@ exports.updateJob = async (req, res, next) => {
                 success: false, message: "Job info update failed."
             });
         }
-    } catch (error) {
-        res.send(error);
-    }
-}
-
-exports.applyForJob = async (req, res, next) => {
-    res.status(200).json({ message: "hello" })
-}
-
-exports.getHighestPaidJobs = async (req, res, next) => {
-    try {
-        const data = await Tour.find().sort("-viewCount").limit(10);
-
-        res.status(200).json({
-            data
-        });
-    } catch (error) {
-        res.send(error);
-    }
-}
-
-exports.getMostAppliedJobs = async (req, res, next) => {
-    try {
-        const data = await Tour.find().sort("fare").limit(5);
-
-        res.status(200).json({
-            data
-        });
     } catch (error) {
         res.send(error);
     }

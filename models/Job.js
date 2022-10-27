@@ -65,11 +65,13 @@ const jobSchema = mongoose.Schema({
         type: String,
         required: [true, "Please Provide the deadline."]
     },
-    applied: {
-        type: Number,
-        required: true,
-        default: 0
-    },
+    applicants: [{
+        user: {
+            type: ObjectId,
+            ref: "User",
+        },
+        resume: String,
+    }],
     manager: {
         type: ObjectId,
         ref: "User",
