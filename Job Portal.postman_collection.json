@@ -1,0 +1,569 @@
+{
+	"info": {
+		"_postman_id": "574f3905-6d41-4232-8b2e-de19af01cb29",
+		"name": "Job Portal",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "22824185"
+	},
+	"item": [
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "Signup",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Candidate 3\",\r\n    \"email\": \"candidate3@gmail.com\",\r\n    \"password\": \"Admin123#\",\r\n    \"image\": \"http://image.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/user/signup",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"user",
+								"signup"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const res = pm.response.json();\r",
+									"pm.collectionVariables.set(\"token\",res.token );"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"manager3@gmail.com\",\r\n    \"password\": \"Admin123#\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/user/login",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"user",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getMe",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/user/me",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"user",
+								"me"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Admin",
+			"item": [
+				{
+					"name": "getCandidates",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/admin/candidates",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"admin",
+								"candidates"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getCandidateDetails",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/admin/candidates/6359ec1ca1447165fc824c24",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"admin",
+								"candidates",
+								"6359ec1ca1447165fc824c24"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getManagers",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/admin/managers",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"admin",
+								"managers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateUserRole",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"role\": \"manager\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/admin/user-role/6359f25f533b2861c153f25f",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"admin",
+								"user-role",
+								"6359f25f533b2861c153f25f"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Job",
+			"item": [
+				{
+					"name": "addJob",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"Office Assistant\",\r\n  \"position\": \"Content Writer\",\r\n  \"type\": \"remote\",\r\n  \"description\": \"lorem\",\r\n  \"location\": \"anywhere\",\r\n  \"skills\": [\"hello\", \"dsf\"],\r\n  \"salaryFrom\": 7000,\r\n  \"salaryTo\": 9000,\r\n  \"deadline\": \"23/10/2022\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/jobs",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"jobs"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getJobs",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/jobs",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"jobs"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getJobDetails",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/jobs/6359e297d4afb656416f31a1",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"jobs",
+								"6359e297d4afb656416f31a1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getHighest-paid",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/jobs/highest-paid",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"jobs",
+								"highest-paid"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get-most-applied",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/jobs/most-applied",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"jobs",
+								"most-applied"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "apply-for-job",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "resume",
+									"type": "file",
+									"src": "/C:/Users/arzu2/Desktop/Md. Ashikur Rahman Arzu -Bogura Polytechinic Institute - Computer Technology - 2016.pdf"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/jobs/6359ea7ba1447165fc824bfb/apply",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"jobs",
+								"6359ea7ba1447165fc824bfb",
+								"apply"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Manager",
+			"item": [
+				{
+					"name": "getAllJobs",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/manager/jobs",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"manager",
+								"jobs"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getJobDetails",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/manager/jobs/6359ea7ba1447165fc824bfb",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"manager",
+								"jobs",
+								"6359ea7ba1447165fc824bfb"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateJobInfo",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"skills\": [\"JS\"]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/manager/jobs/6352f80c792df0b37a8768ba",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"manager",
+								"jobs",
+								"6352f80c792df0b37a8768ba"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseURL",
+			"value": "http://localhost:5000/api/v1",
+			"type": "string"
+		},
+		{
+			"key": "token",
+			"value": ""
+		}
+	]
+}
