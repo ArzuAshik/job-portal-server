@@ -1,9 +1,10 @@
+const { Application } = require("../models/Application");
 const { User } = require("../models/User");
 
 exports.getCandidates = async (req, res, next) => {
     try {
         const data = await User.find({ role: "candidate" })
-            .select("-password -createdAt -updatedAt");
+            .select("-password -createdAt -updatedAt -role -image");
         // .sort(sortBy).skip((Number(page) - 1) * Number(limit)).limit(Number(limit));
 
         res.status(200).json({
@@ -17,11 +18,13 @@ exports.getCandidates = async (req, res, next) => {
 exports.getCandidateDetails = async (req, res, next) => {
     const { id } = req.params;
     try {
-        const data = await User.findById(id)
+        const userInfo = await User.findById(id)
             .select("-password -createdAt -updatedAt");
+        const applications = await Application.find({ candidateId: userInfo._id.toString() })
+        .populate({path:"jobId", select: "-applicants"}).select("-candidateId")
 
         res.status(200).json({
-            data
+            data: { userInfo, applications }
         });
     } catch (error) {
         res.send(error);

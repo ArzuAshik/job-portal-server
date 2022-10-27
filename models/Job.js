@@ -16,8 +16,11 @@ const jobSchema = mongoose.Schema({
     },
     type: {
         type: String,
-        required: [true, "Please Provide job type."]
-        // full time, part time, remote, intern
+        required: [true, "Please Provide job type."],
+        enum: {
+            values: ["full time", "part time", "remote", "intern"],
+            message: "full time, part time, remote, intern",
+        },
     },
     description: {
         type: String,

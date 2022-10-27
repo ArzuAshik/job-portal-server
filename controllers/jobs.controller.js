@@ -97,7 +97,7 @@ exports.applyForJob = async (req, res, next) => {
         );
 
         if (result.modifiedCount > 0) {
-            res.status(200).json({ success: true, message: "successfully applied for the job.", apply, result });
+            res.status(200).json({ success: true, message: "successfully applied for the job.", data: apply });
         } else {
             res.status(200).json({ success: false, message: "application failed.", result, apply });
         }
