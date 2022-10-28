@@ -83,7 +83,7 @@ exports.applyForJob = async (req, res, next) => {
             resume: undefined
         };
         if (req.file) {
-            applicationData.resume = req.file.filename;
+            applicationData.resume = req.file?.filename;
         }
 
         const apply = await Application.create(applicationData);
@@ -91,7 +91,7 @@ exports.applyForJob = async (req, res, next) => {
             { _id: id },
             {
                 $push: {
-                    applicants: { user: req.user.id, resume: req.file.filename }
+                    applicants: { user: req.user.id, resume: applicationData.resume }
                 }
             }
         );
@@ -103,7 +103,7 @@ exports.applyForJob = async (req, res, next) => {
         }
 
     } catch (error) {
-        console.log(error);
+        // console.log(error);
         res.status(200).json({ success: false, message: "application failed.", a: req.body });
     }
 }

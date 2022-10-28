@@ -65,7 +65,7 @@ const jobSchema = mongoose.Schema({
     },
     deadline: {
         // should be a date
-        type: String,
+        type: Date,
         required: [true, "Please Provide the deadline."]
     },
     applicants: [{
